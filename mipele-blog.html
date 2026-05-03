@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Pele | Independent Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --gold: #c8a84b;
+    --gold-light: #e0c068;
+    --gold-dim: rgba(200,168,75,0.12);
+    --text: #e8e2d5;
+    --text-muted: #8a8070;
+    --text-dim: #5a5248;
+    --en: #4a9eff;
+    --id: #ff6b4a;
+    --tag-bg: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+    background: rgba(14,14,14,0.92);
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 60px;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .header-meta {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-align: right;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tagline-bar {
+    background: var(--gold);
+    padding: 5px 24px;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #0e0e0e;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .ticker {
+    white-space: nowrap;
+    animation: ticker 30s linear infinite;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(100vw); }
+    to   { transform: translateX(-100%); }
+  }
+
+  /* ── SEARCH & FILTER ── */
+  .controls {
+    padding: 20px 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-wrap {
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    pointer-events: none;
+  }
+
+  #searchInput {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px 11px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #searchInput:focus { border-color: var(--gold); }
+  #searchInput::placeholder { color: var(--text-dim); }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: var(--gold); border-color: var(--gold); color: #0e0e0e; font-weight: 500; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 40px 24px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,168,75,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-family: 'Lora', serif;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 20px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 3px;
+  }
+
+  /* ── ARTICLE GRID ── */
+  .section-label {
+    padding: 20px 24px 14px;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+
+  #articleGrid {
+    padding: 16px 24px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.25s;
+    transform-origin: bottom;
+  }
+
+  .card:hover {
+    border-color: rgba(200,168,75,0.35);
+    background: var(--surface2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .card:hover::before { transform: scaleY(1); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .badge {
+    font-size: 0.58rem;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .badge-en { background: rgba(74,158,255,0.15); color: var(--en); border: 1px solid rgba(74,158,255,0.25); }
+  .badge-id { background: rgba(255,107,74,0.15); color: var(--id); border: 1px solid rgba(255,107,74,0.25); }
+  .badge-series { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(200,168,75,0.25); }
+
+  .card-date {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .card:hover .card-title { color: var(--gold-light); }
+
+  .card-desc {
+    font-family: 'Lora', serif;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    background: var(--tag-bg);
+    border-radius: 4px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .read-btn {
+    font-size: 0.68rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .read-btn svg { transition: transform 0.2s; }
+  .card:hover .read-btn svg { transform: translateX(4px); }
+
+  .card-type {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-dim);
+    font-family: 'Lora', serif;
+    font-style: italic;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal-overlay.open { display: flex; flex-direction: column; }
+
+  .modal-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .modal-close {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(200,168,75,0.1); border-color: var(--gold); color: var(--gold); }
+
+  .modal-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .modal-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: 'Lora', serif;
+    font-style: italic;
+  }
+
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .modal-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .modal-gdrive-link {
+    font-size: 0.68rem;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* ── ABOUT ── */
+  .about-section {
+    margin: 8px 24px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-section::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(200,168,75,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .about-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .about-text {
+    font-family: 'Lora', serif;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .about-framework {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--gold-dim);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    font-family: 'Lora', serif;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    line-height: 1.8;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (min-width: 640px) {
+    #articleGrid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    #articleGrid { grid-template-columns: 1fr 1fr 1fr; }
+    .hero { padding: 56px 40px 44px; }
+    .controls { padding: 24px 40px 0; }
+    .section-label { padding: 20px 40px 14px; }
+    #articleGrid { padding: 20px 40px; }
+    .about-section { margin: 8px 40px 32px; }
+    footer { padding: 24px 40px; }
+    .header-top { padding: 0 40px; }
+    .tagline-bar { padding: 5px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a href="#" class="logo">Mi<span>Pele</span> Analysis</a>
+    <div class="header-meta">
+      Solo, Central Java<br>Independent Research
+    </div>
+  </div>
+  <div class="tagline-bar">
+    <span class="ticker">
+      ◆ Econophysics · Fiscal Dynamics · Energy Markets · Indonesia · HFFDM Framework · Thermal Entropy Analysis · Independent Citizen Analyst ◆ Econophysics · Fiscal Dynamics · Energy Markets · Indonesia · HFFDM Framework
+    </span>
+  </div>
+</header>
+
+<!-- SEARCH & FILTERS -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Cari artikel... / Search articles...">
+  </div>
+  <div class="filters" id="filterBar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="Indonesia Analysis">Indonesia</button>
+    <button class="filter-btn" data-filter="HFFDM">HFFDM</button>
+    <button class="filter-btn" data-filter="Energy">Energy</button>
+    <button class="filter-btn" data-filter="Japan">Japan</button>
+    <button class="filter-btn" data-filter="Public Health">Health</button>
+    <button class="filter-btn" data-filter="Finance">Finance</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Independent Citizen Analysis · Solo, Indonesia</div>
+  <h1 class="hero-title">Analytical Writing<br>Beyond <em>Institutions</em></h1>
+  <p class="hero-desc">
+    Original research applying econophysics, thermodynamic entropy, and fracture mechanics to Indonesia's fiscal and energy landscape. Distributed freely via WhatsApp alumni networks and social media.
+  </p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num" id="statTotal">—</span>
+      <span class="stat-label">Articles</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">2</span>
+      <span class="stat-label">Languages</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">10+</span>
+      <span class="stat-label">Countries Reached</span>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLES SECTION -->
+<div class="section-label" id="articleCount">Loading articles...</div>
+<div id="articleGrid"></div>
+
+<!-- ABOUT -->
+<div class="about-section">
+  <div class="about-label">About the Author</div>
+  <h2 class="about-title">Mi Pele</h2>
+  <p class="about-text">
+    Independent citizen analyst based in Solo, Central Java, Indonesia — operating outside formal institutions. 
+    Developing original econophysics frameworks for macroeconomic analysis, with a focus on Indonesia's structural fiscal vulnerabilities and 30-year crisis cycles.
+  </p>
+  <div class="about-framework">
+    <strong>Thermal HFFDM</strong> (Habibie Fiscal Fracture-Divergence Model) — integrating thermodynamic entropy principles with fiscal dynamics. Named in honor of B.J. Habibie. Validated against historical crises: Thailand 1997, Argentina 2001, Turkey 2018, Sri Lanka 2022.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>© Mi Pele Analysis · Solo, Central Java, Indonesia</div>
+  <div style="margin-top:4px;">Independent Research · Not affiliated with any institution</div>
+  <div style="margin-top:8px; color: var(--gold);">Articles stored & served via <a href="https://drive.google.com" target="_blank">Google Drive</a></div>
+</footer>
+
+<!-- PDF MODAL -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-header">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-title" id="modalTitle">Loading...</div>
+  </div>
+  <div class="modal-body">
+    <div class="modal-loading" id="modalLoading">
+      <div class="spinner"></div>
+      <span>Loading PDF from Google Drive...</span>
+    </div>
+    <iframe id="pdfFrame" onload="hideLoading()" title="PDF Viewer"></iframe>
+  </div>
+  <div class="modal-footer">
+    <span style="font-size:0.65rem; color: var(--text-dim); letter-spacing:0.04em;">Powered by Google Drive</span>
+    <a href="#" id="modalGdriveLink" target="_blank" class="modal-gdrive-link">
+      Open in Drive
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ARTICLE DATABASE
+// Untuk menambah artikel: copy salah satu objek di bawah,
+// ganti driveId dengan ID file Google Drive Anda.
+//
+// Cara dapat Drive ID:
+// Klik kanan file PDF di Drive → "Get link" → salin ID
+// dari URL: drive.google.com/file/d/[INI_ID_NYA]/view
+// ══════════════════════════════════════════════════════
+
+const ARTICLES = [
+  {
+    id: 1,
+    title: "Japan: The Paradox Nation",
+    desc: "Six structural paradoxes defining Japan's economy and demography — from the world's largest creditor burdened by impossible debt, to declining population fueling technological innovation.",
+    date: "2025",
+    lang: "en",
+    tags: ["Japan", "Structural Economics", "Demography", "Debt Paradox"],
+    category: "Japan",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: null,
+  },
+  {
+    id: 2,
+    title: "Indonesia Analysis Series — Article I",
+    desc: "Opening the ten-part series on Indonesia's multi-layered fiscal and energy vulnerabilities. Framework introduction and Ω_Entropy stress index baseline.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "HFFDM", "Fiscal Stress", "Ω_Entropy"],
+    category: "Indonesia Analysis",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 3,
+    title: "Indonesia Analysis Series — Article II",
+    desc: "Rupiah dynamics and capital outflow modeling under dual-chokepoint stress. Thermodynamic fluid analogy applied to reserve depletion.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "Rupiah", "Capital Flight", "HFFDM"],
+    category: "Indonesia Analysis",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 4,
+    title: "Indonesia Analysis Series — Article III",
+    desc: "Strait of Hormuz closure impact on Indonesia's BBM reserves. Effective supply under panic-adjusted conditions estimated at 40–50 days.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "Energy", "Hormuz", "BBM Reserves"],
+    category: "Energy",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 5,
+    title: "Indonesia Analysis Series — Article IV",
+    desc: "Brent crude at record levels and cascading fiscal impact. Bayesian probability update on Bab el-Mandeb secondary closure risk.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "Brent Crude", "Bayesian", "Energy Markets"],
+    category: "Energy",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 6,
+    title: "Indonesia Analysis Series — Article V",
+    desc: "Indonesia's exclusion from Iran's selective Hormuz passage approvals — geopolitical dimensions and the Davos Board of Peace connection.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "Geopolitics", "Iran", "Hormuz"],
+    category: "Indonesia Analysis",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 7,
+    title: "Indonesia Analysis Series — Article VI",
+    desc: "IHSG crash analysis under HFFDM Gen 3c framework. Post-ceasefire rebound: genuine recovery or bull trap?",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "IHSG", "Market Analysis", "HFFDM"],
+    category: "HFFDM",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 8,
+    title: "Indonesia Analysis Series — Article VII",
+    desc: "Fitch sovereign outlook downgrade to Negative — thermodynamic fracture point analysis. ASEAN peer comparison: Indonesia ranked 3rd of 5 in composite fiscal resilience.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "Fitch", "Sovereign Risk", "ASEAN"],
+    category: "Indonesia Analysis",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 9,
+    title: "Indonesia Analysis Series — Article VIII",
+    desc: "Zero-Based Budgeting (ZBB) framework applied to national fiscal reform. Connecting household budget principles to state expenditure restructuring.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "ZBB", "Fiscal Reform", "Budgeting"],
+    category: "Finance",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 10,
+    title: "Indonesia Analysis Series — Article IX",
+    desc: "Historical parallel analysis: Berkeley Mafia era versus current governance architecture. 30-year crisis cycle model: 1965/66 → 1997/98 → 2026/27?",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "History", "Governance", "Crisis Cycle"],
+    category: "Indonesia Analysis",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 11,
+    title: "Indonesia Analysis Series — Article X",
+    desc: "Synthesis and forward projection. HFFDM Gen 3c final composite Ω_Entropy reading. Scenario planning for Indonesia's fiscal trajectory.",
+    date: "2025",
+    lang: "en",
+    tags: ["Indonesia", "HFFDM", "Scenario Planning", "Projection"],
+    category: "HFFDM",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: "Indonesia Analysis Series",
+  },
+  {
+    id: 12,
+    title: "Krisis Campak Indonesia: Analisis Epidemiologi",
+    desc: "Kolaborasi dengan Ismail Fahmi (Drone Emprit). Data epidemiologi terkini diperkuat dengan model penyebaran dan rekomendasi kebijakan imunisasi.",
+    date: "2025",
+    lang: "id",
+    tags: ["Indonesia", "Public Health", "Measles", "Epidemiology"],
+    category: "Public Health",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: null,
+  },
+  {
+    id: 13,
+    title: "Update Pasar: Rupiah & IHSG — Pasca Gencatan Senjata",
+    desc: "Analisis pergerakan USD/IDR dan IHSG pasca pengumuman gencatan senjata AS-Iran. Apakah rebound ini sinyal pemulihan atau jebakan banteng?",
+    date: "2025",
+    lang: "id",
+    tags: ["Rupiah", "IHSG", "Pasar Modal", "Analisis"],
+    category: "Finance",
+    driveId: "GANTI_DENGAN_ID_DRIVE_ANDA",
+    series: null,
+  },
+];
+
+// ══════════════════════════════════════════════════════
+// RENDER ENGINE
+// ══════════════════════════════════════════════════════
+
+let activeFilter = 'all';
+let searchQuery = '';
+
+function buildDriveUrl(driveId) {
+  return `https://drive.google.com/file/d/${driveId}/preview`;
+}
+
+function buildDriveViewUrl(driveId) {
+  return `https://drive.google.com/file/d/${driveId}/view`;
+}
+
+function renderCards(articles) {
+  const grid = document.getElementById('articleGrid');
+  const countEl = document.getElementById('articleCount');
+
+  if (articles.length === 0) {
+    grid.innerHTML = `<div class="empty">No articles found — Tidak ada artikel yang cocok.</div>`;
+    countEl.textContent = '0 articles found';
+    return;
+  }
+
+  countEl.textContent = `${articles.length} Article${articles.length !== 1 ? 's' : ''}`;
+
+  grid.innerHTML = articles.map(a => `
+    <div class="card" onclick="openModal(${a.id})">
+      <div class="card-top">
+        <div class="card-badges">
+          <span class="badge badge-${a.lang}">${a.lang.toUpperCase()}</span>
+          ${a.series ? `<span class="badge badge-series">${a.series}</span>` : ''}
+        </div>
+        <span class="card-date">${a.date}</span>
+      </div>
+      <h2 class="card-title">${a.title}</h2>
+      <p class="card-desc">${a.desc}</p>
+      <div class="card-tags">
+        ${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>
+      <div class="card-footer">
+        <span class="read-btn">
+          Read PDF
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </span>
+        <span class="card-type">PDF via Google Drive</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterAndSearch() {
+  let results = ARTICLES;
+
+  if (activeFilter !== 'all') {
+    results = results.filter(a => a.category === activeFilter || a.tags.includes(activeFilter));
+  }
+
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    results = results.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.desc.toLowerCase().includes(q) ||
+      a.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+
+  renderCards(results);
+}
+
+// ── Filter buttons ──
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    filterAndSearch();
+  });
+});
+
+// ── Search ──
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  filterAndSearch();
+});
+
+// ── MODAL ──
+function openModal(id) {
+  const article = ARTICLES.find(a => a.id === id);
+  if (!article) return;
+
+  document.getElementById('modalTitle').textContent = article.title;
+  document.getElementById('modalLoading').style.display = 'flex';
+  document.getElementById('pdfFrame').src = '';
+
+  const gdriveUrl = buildDriveViewUrl(article.driveId);
+  document.getElementById('modalGdriveLink').href = gdriveUrl;
+
+  if (article.driveId === 'GANTI_DENGAN_ID_DRIVE_ANDA') {
+    document.getElementById('modalLoading').innerHTML = `
+      <div style="font-size:2rem;">📄</div>
+      <span style="color: var(--gold); font-style:normal; font-weight:500;">Drive ID belum diset</span>
+      <span style="font-size:0.75rem; color: var(--text-dim); max-width:240px; text-align:center; line-height:1.6;">
+        Ganti <code style="color:var(--gold)">GANTI_DENGAN_ID_DRIVE_ANDA</code> pada data artikel ini dengan ID Google Drive Anda.
+      </span>
+    `;
+  } else {
+    setTimeout(() => {
+      document.getElementById('pdfFrame').src = buildDriveUrl(article.driveId);
+    }, 100);
+  }
+
+  document.getElementById('pdfModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('pdfModal').classList.remove('open');
+  document.getElementById('pdfFrame').src = '';
+  document.body.style.overflow = '';
+}
+
+function hideLoading() {
+  document.getElementById('modalLoading').style.display = 'none';
+}
+
+document.getElementById('pdfModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── INIT ──
+document.getElementById('statTotal').textContent = ARTICLES.length;
+filterAndSearch();
+</script>
+</body>
+</html>
